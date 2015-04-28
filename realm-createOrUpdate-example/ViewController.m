@@ -26,6 +26,10 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
+    [RLMRealm setDefaultRealmSchemaVersion:1 withMigrationBlock:^(RLMMigration *migration, NSUInteger oldSchemaVersion) {
+        //default migration block
+    }];
+    
     [self clearMockData:nil];
 }
 

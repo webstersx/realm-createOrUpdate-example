@@ -12,7 +12,9 @@
 
 @interface Person : RLMObject
 @property NSInteger _id;
+@property NSString *pin;
 @property NSString *first_name;
+@property NSString *last_name;
 @property BankAccount *bank_account;
 @end
 

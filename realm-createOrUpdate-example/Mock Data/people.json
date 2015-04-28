@@ -1,14 +1,18 @@
 [
     {
         "_id": 1,
-        "first_name": "Shawn",
+        "pin": "0000",
+        "first_name": "Shawn W.",
+        "last_name": "",
         "bank_account": {
             "_id": 1001
         }
     },
     {
         "_id": 2,
+        "pin": "1234",
         "first_name": "Tim",
+        "last_name": "O.",
         "bank_account": {
             "_id": 1002
         }
