@@ -3,6 +3,8 @@
 
 target 'realm-createOrUpdate-example' do
 
+pod 'Realm'
+
 end
 
 target 'realm-createOrUpdate-exampleTests' do
