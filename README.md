@@ -13,7 +13,7 @@ createOrUpdateInRealm:withObject: and friends now support partially updating exi
 
 What I've found in practice however is that **nested partial objects have missing values reset to their default values** when the object that links to that object receives a partial update.
 
-This project serves to demonstrate this issue which still exists as of Realm Cocoa 0.94.1.
+This project serves to demonstrate this issue which still exists as of Realm Cocoa 0.91.4.
 
 Diving into the code, the issue appears to surface itself around the difference between the following calls in 
 ```objective-c
