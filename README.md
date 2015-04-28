@@ -80,4 +80,6 @@ By this point, for the nested objects -- It's intantiated a new object and fille
 RLMDynamicSet(object, prop, propValue,
               options | RLMCreationOptionsUpdateOrCreate | (prop.isPrimary ? RLMCreationOptionsEnforceUnique : 0));
 ```                              
-This call however is so fundamental that Realm would be acting here exacly as intended so the issue likely exists in RLMUtil.mm:232 not handing down permission to allow missing values
+This call however is so fundamental that Realm would be acting here exacly as intended so the issue likely somewhere around the point where it attempts to cast the nested object or not forwarding the allowsMissing property down the chain through to RLMValidatedObjectForProperty.
+
+Given that we know that the root object we're updating already exists -- it could be worth doing a lookup downstream to find the object which contains the primaryKey as provided in the nested object and fetch/update that instead of allowing it to fail the cast and create a new object with defaults.
