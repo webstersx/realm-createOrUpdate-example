@@ -12,11 +12,8 @@
 #import "Person.h"
 #import "BankAccount.h"
 
-@interface ViewController () {
-    BOOL loadedBankAccounts;
-    BOOL updatedPerson1;
+@interface ViewController ()
 
-}
 @property (weak, nonatomic) IBOutlet UITextView *tvPeople;
 @property (weak, nonatomic) IBOutlet UITextView *tvBankAccounts;
 @property (weak, nonatomic) IBOutlet UILabel *lblDescription;
@@ -43,17 +40,23 @@
     [realm deleteAllObjects];
     [realm commitWriteTransaction];
     
-    loadedBankAccounts = NO;
-    updatedPerson1 = NO;
-    
     [self updateDisplay];
 }
 
+- (id) loadJSON:(NSString*)filename {
+    //strip .json in case I made a mistake
+    if ([filename hasSuffix:@".json"]) {
+        filename = [filename stringByReplacingOccurrencesOfString:@".json" withString:@""];
+    }
+    
+    NSData *data = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:filename ofType:@"json"]];
+    
+    return [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+    
+}
+
 - (IBAction) loadPeople:(id)sender {
-    NSArray *people = [NSJSONSerialization JSONObjectWithData:[NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"people"
-                                                                                                                             ofType:@"json"]]
-                                                      options:0
-                                                        error:nil];
+    NSArray *people = [self loadJSON:@"people"];
     
     RLMRealm *realm = [RLMRealm defaultRealm];
     [realm beginWriteTransaction];
@@ -64,16 +67,11 @@
     
     [realm commitWriteTransaction];
     
-    updatedPerson1 = NO;
-    
     [self updateDisplay];
 }
 
 - (IBAction) loadBankAccounts:(id)sender {
-    NSArray *accounts = [NSJSONSerialization JSONObjectWithData:[NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"bank_accounts"
-                                                                                                                               ofType:@"json"]]
-                                                        options:0
-                                                          error:nil];
+    NSArray *accounts = [self loadJSON:@"bank_accounts"];
     
     RLMRealm *realm = [RLMRealm defaultRealm];
     [realm beginWriteTransaction];
@@ -84,23 +82,16 @@
     
     [realm commitWriteTransaction];
     
-    loadedBankAccounts = YES;
-    
     [self updateDisplay];
 }
 
 - (IBAction)updatePerson1:(id)sender {
-    NSDictionary *person1 = [NSJSONSerialization JSONObjectWithData:[NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"update_person_1"
-                                                                                                                             ofType:@"json"]]
-                                                      options:0
-                                                        error:nil];
+    NSDictionary *person1 = [self loadJSON:@"update_person_1"];
     
     RLMRealm *realm = [RLMRealm defaultRealm];
     [realm beginWriteTransaction];
     [Person createOrUpdateInDefaultRealmWithObject:person1];
     [realm commitWriteTransaction];
-    
-    updatedPerson1 = YES;
     
     [self updateDisplay];
     
@@ -119,54 +110,53 @@
     
     NSString *message = @"This state hasn't been defined yet.";
     
-    NSInteger np = [[Person allObjects] count];
-    NSInteger nba = [[BankAccount allObjects] count];
+    NSInteger numAccounts = [[BankAccount allObjects] count];
     Person *shawn = [Person objectForPrimaryKey:@(1)];
     Person *tim = [Person objectForPrimaryKey:@(2)];
     BankAccount *shawnsBankAccount = shawn.bank_account;
     BankAccount *timsBankAccount = tim.bank_account;
     float timsBalance = timsBankAccount.balance;
     float shawnsBalance = shawnsBankAccount.balance;
+    BOOL shawnUpdated = [shawn.first_name isEqualToString:@"Shawn Webster"];
     
-    if (np == 0 && nba == 0) {
-        message = @"The database is empty";
-    } else if (np == 1 && nba == 1) {
-        message = @"Shawn Webster has been added as a person, and his bank account has default values";
-    } else if (np == 2 && nba == 2) {
-        
-            
-        if (loadedBankAccounts) {
-            if (updatedPerson1) {
-                if (shawnsBalance == 0) {
-                    message = @"Tim's money went missing, then we updated Shawn's name (and cleared his debt) -- bad!";
-                } else {
-                    message = @"Loaded People, updated Shawn's name, then loaded Bank Accounts. This is also good.";
-                }
-            } else {
-                
-                if (timsBalance == 0) {
-                    message = @"Bank Accounts *then* People were loaded. Tim is going to be really angry when he finds out his $10,000 is missing.";
-                } else {
-                    message = @"People *then* Bank Accounts were loaded. Everything is as it should be.";
-                }
-            }
+    if (!shawn && !tim) {
+        //both are loaded
+        if (numAccounts == 2) {
+            message = @"Accounts are correct but not linked to.";
         } else {
-            
-            if (updatedPerson1) {
-                message = @"You loaded People then updated Shawn's name. Bank Accounts have default values";
+            message = @"Database is empty";
+        }
+    } else if (shawn && !tim) {
+        if (numAccounts == 1) {
+            message = @"Updated person 1, name is correct but account has default values";
+        } else {
+            if (shawnsBalance == 0) {
+                message = @"Loaded accounts, then updated person 1. Person 1's balance just got wiped out.";
             } else {
-                message = @"You've just loaded People. Their Bank Accounts have default values.";
+                message = @"Updated person 1, then loaded accounts. Person 1 is correct but the person who owns account 1002 hasn't been loaded.";
             }
         }
-    } else if (nba == 2) {
-        
-        if (updatedPerson1) {
-            message = @"You just updated Shawn's name... oh, and you cleared his debts! Yay for him, but this is really bad.";
-            
-        } else {
-            message = @"You've just loaded Bank Accounts, they're not owned by any people yet but their balances are correct.";
+    } else {
+        //shawn and tim
+        if (shawnsBalance == 0 && timsBalance == 0) {
+            if (shawnUpdated) {
+                message = @"People loaded then persion 1 updated. Accounts have default values.";
+            } else {
+                message = @"People loaded. If accounts were previously loaded they just got reset.";
+            }
+        } else if (timsBalance == 10000) {
+            if (shawnsBalance == -10000) {
+                if (shawnUpdated) {
+                    message = @"People, person 1, then bank accounts in that order. This is a valid state.";
+                } else {
+                    message = @"People, then bank accounts in that order. This is a valid state.";
+                }
+            } else {
+                message = @"People, bank accounts, then person 1. Person 1's balance just got reset.";
+            }
         }
     }
+    
     
     self.lblDescription.text = message;
 }
