@@ -1,0 +1,14 @@
+[
+    {
+        "_id": 1001,
+        "balance": -10000,
+        "cr_interest_rate": 0.0375,
+        "dr_interest_rate": 0.2149
+    },
+    {
+        "_id": 1002,
+        "balance": 10000,
+        "cr_interest_rate": 0.0400,
+        "dr_interest_rate": 0.1300
+    }
+]
