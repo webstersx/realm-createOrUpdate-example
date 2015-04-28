@@ -12,7 +12,9 @@
 
 + (NSDictionary*) defaultPropertyValues {
     return @{@"_id":@(0),
-             @"first_name":@""};
+             @"first_name":@"",
+             @"last_name":@"",
+             @"pin":@""};
 }
 
 + (NSString*) primaryKey {
