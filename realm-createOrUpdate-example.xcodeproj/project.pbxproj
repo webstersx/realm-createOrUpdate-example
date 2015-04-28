@@ -19,6 +19,7 @@
 		E43CFA711AEF50DF006B6276 /* bank_accounts.json in Resources */ = {isa = PBXBuildFile; fileRef = E43CFA701AEF50DF006B6276 /* bank_accounts.json */; };
 		E43CFA741AEF5238006B6276 /* Person.m in Sources */ = {isa = PBXBuildFile; fileRef = E43CFA731AEF5238006B6276 /* Person.m */; };
 		E43CFA771AEF5243006B6276 /* BankAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = E43CFA761AEF5243006B6276 /* BankAccount.m */; };
+		E43CFA791AEF5B02006B6276 /* update_person_1.json in Resources */ = {isa = PBXBuildFile; fileRef = E43CFA781AEF5B02006B6276 /* update_person_1.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +55,7 @@
 		E43CFA731AEF5238006B6276 /* Person.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Person.m; sourceTree = "<group>"; };
 		E43CFA751AEF5243006B6276 /* BankAccount.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BankAccount.h; sourceTree = "<group>"; };
 		E43CFA761AEF5243006B6276 /* BankAccount.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BankAccount.m; sourceTree = "<group>"; };
+		E43CFA781AEF5B02006B6276 /* update_person_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = update_person_1.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -160,6 +162,7 @@
 			children = (
 				E43CFA6E1AEF50D3006B6276 /* people.json */,
 				E43CFA701AEF50DF006B6276 /* bank_accounts.json */,
+				E43CFA781AEF5B02006B6276 /* update_person_1.json */,
 			);
 			path = "Mock Data";
 			sourceTree = "<group>";
@@ -258,6 +261,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E43CFA711AEF50DF006B6276 /* bank_accounts.json in Resources */,
+				E43CFA791AEF5B02006B6276 /* update_person_1.json in Resources */,
 				E43CFA6F1AEF50D3006B6276 /* people.json in Resources */,
 				E43CFA521AEF4EC4006B6276 /* Main.storyboard in Resources */,
 				E43CFA571AEF4EC4006B6276 /* LaunchScreen.xib in Resources */,
